@@ -33,6 +33,8 @@ nn.add_layer(
 nn.set_inputs((0, 1, -1))
 nn.build_connections()
 
+nn.mutate(0.5, 0.05)
+
 nn.start()
 
 for output in nn.get_outputs():

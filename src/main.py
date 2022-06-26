@@ -1,5 +1,6 @@
+import random
 from neuron import Neuron, Connection, IONeuron
-from defaultFuncs import randomStrength, sigmoid
+from defaultFuncs import randomStrength, sigmoid, doProbability
 
 class Layer:
     def __init__(self, neurons):
@@ -85,7 +86,6 @@ class Network:
             for outputNeuron in layer.neurons:
                 # calculate an output passed through a normalizing function
                 outputNeuron.activate(normalizationFunction)
-                print(f"{outputNeuron}")
     
     def get_outputs(self):
         """Receive an iterator of all output neurons
@@ -94,3 +94,24 @@ class Network:
             iterator: Iterator containing output neurons
         """
         return iter(self.layers[-1].neurons)
+    
+    def mutate(self, chance, standardDeviation):
+        """Mutate each neuron biases and weights
+
+        Args:
+            chance (float): Mutation rate (0.0 to 1.0)
+            standardDeviation (float): Standard deviation for gaussian number
+        """
+        # for each layer (skipping input layer)
+        for layer in self.layers[1:]:
+            # for each neuron, have a chance to modify:
+            # - bias
+            # - each connection
+
+            for neuron in layer.neurons:
+                if doProbability(chance):
+                    neuron.bias += random.gauss(0, standardDeviation)
+            
+                for connection in neuron.connections:
+                    if doProbability(chance):
+                        connection.weight += random.gauss(0, standardDeviation)

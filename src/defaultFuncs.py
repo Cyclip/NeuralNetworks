@@ -13,3 +13,6 @@ def randomStrength():
 
 def randomName(n=8):
     return ''.join([random.choice(charset) for i in range(n)])
+
+def doProbability(successRate):
+    return random.uniform(0, 1) <= successRate
