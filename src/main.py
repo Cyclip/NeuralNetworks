@@ -50,13 +50,12 @@ class Network:
 
             # for each output neuron in current layer
             for outputNeuron in layer.neurons:
-                print(f"\nLayer {layerIndex } {outputNeuron.name}")
+                # print(f"\nLayer {layerIndex} {outputNeuron.name}")
                 # iterate through all input neurons (previous layer)
                 for inputNeuron in self.layers[layerIndex - 1].neurons:
                     # create a new connection with a base strength
                     connection = Connection(inputNeuron, strengthFunction(), layerIndex)
                     outputNeuron.connections.append(connection)
-                    print(f"\t<= {inputNeuron}")
     
     def set_inputs(self, values):
         """Set the inputs for the neural network
@@ -66,6 +65,18 @@ class Network:
         """
         for inputNeuron, value in zip(self.layers[0].neurons, values):
             inputNeuron.value = value
+    
+    def set_input(self, name, value):
+        """Set the input of a single input neuron.
+
+        Args:
+            name (string): Name of input neuron
+            value (float): Value to set it to
+        """
+        for inputNeuron in self.layers[0].neurons:
+            if inputNeuron.name == name:
+                inputNeuron.value = value
+                return
     
     def start(self, normalizationFunction=sigmoid):
         """Run the neural network.
@@ -95,6 +106,15 @@ class Network:
         """
         return iter(self.layers[-1].neurons)
     
+    def get_highest_output(self):
+        highest = [None, float('-inf')]
+
+        for outputNeuron in self.get_outputs():
+            if outputNeuron.value > highest[1]:
+                highest = [outputNeuron.name, outputNeuron.value]
+        
+        return highest
+    
     def mutate(self, chance, standardDeviation):
         """Mutate each neuron biases and weights
 
@@ -115,3 +135,17 @@ class Network:
                 for connection in neuron.connections:
                     if doProbability(chance):
                         connection.weight += random.gauss(0, standardDeviation)
+    
+    def __str__(self):
+        s = ""
+        for layerIndex, layer in enumerate(self.layers):
+            s += f"Layer {layerIndex}\n"
+
+            for neuron in layer.neurons:
+                s += f"\tNeuron {neuron.name:<12}: {neuron.value}\n"
+                s += "\t\t" + "\t".join(
+                    [str(round(i.weight, 3)) for i in neuron.connections]
+                ) + "\n\n"
+        
+        s += "\n\n"
+        return s

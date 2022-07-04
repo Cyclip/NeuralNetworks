@@ -9,7 +9,7 @@ def sigmoid(x):
     return sig
 
 def randomStrength():
-    return random.randint(-100, 100) / 100
+    return random.uniform(-1, 1)
 
 def randomName(n=8):
     return ''.join([random.choice(charset) for i in range(n)])

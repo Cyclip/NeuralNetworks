@@ -22,6 +22,17 @@ nn.add_layer(
     ))
 )
 
+# hidden layer
+nn.add_layer(
+    Layer((
+        # biases
+        Neuron(1),
+        Neuron(1),
+        Neuron(0.5),
+        Neuron(-0.5),
+    ))
+)
+
 # output layer
 nn.add_layer(
     Layer((

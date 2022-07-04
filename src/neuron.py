@@ -12,7 +12,7 @@ class Neuron:
         Args:
             bias (float): Bias to add onto the weighted sum of output
             value (int, optional): Value of the neuron. Defaults to 0.
-            name (string, optional): Name of the neuron. Defaults to None.
+            name (string, optional): Unique name of the neuron. Defaults to None.
         """
         self.value = value
         self.bias = bias
@@ -39,6 +39,9 @@ class Neuron:
             connection.neuronFrom.value * connection.weight
             for connection in self.connections
         ]) + self.bias)
+
+        # if self.value < 0:
+        #     self.value = 0
 
     def __str__(self):
         return f"{self.get_name()}: {self.value} (bias {self.bias})"
